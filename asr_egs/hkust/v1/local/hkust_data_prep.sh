@@ -78,6 +78,7 @@ find $HKUST_TEXT_DIR -iname "*.txt" | grep -i "trans/dev" | xargs cat |\
 #Download and configure segment tools  
 pyver=`python --version 2>&1 | sed -e 's:^[A-Za-z ]*\([2-3]\.[0-9]\+\).*:\1:g'`
 export PYTHONPATH=$PYTHONPATH:`pwd`/tools/mmseg-1.3.0/lib/python${pyver}/site-packages
+echo $PYTHONPATH
 if [ ! -f tools/mmseg-1.3.0/lib/python${pyver}/site-packages/*/mmseg.py ]; then
   echo "--- Downloading mmseg-1.3.0 ..."
   echo "NOTE: it assumes that you have Python, Setuptools installed on your system!"
@@ -86,8 +87,8 @@ if [ ! -f tools/mmseg-1.3.0/lib/python${pyver}/site-packages/*/mmseg.py ]; then
   cd tools/mmseg-1.3.0
   mkdir -p lib/python${pyver}/site-packages
   ln -s lib lib64
-  python setup.py build 
-  python setup.py install --prefix=.
+  python2 setup.py build 
+  python2 setup.py install --prefix=.
   cd ../..
   if [ ! -f tools/mmseg-1.3.0/lib/python${pyver}/site-packages/*/mmseg.py ]; then
     echo "mmseg is not found - installation failed?"
@@ -101,7 +102,7 @@ cat $train_dir/transcripts.txt |\
   sed -e 's/<noise>\(.\+\)<\/noise>/\1/g' |\
   sed -e 's/((\([^)]\{0,\}\)))/\1/g' |\
   local/hkust_normalize.pl |\
-  python local/hkust_segment.py |\
+  python2 local/hkust_segment.py |\
   awk '{if (NF > 1) print $0;}' > $train_dir/text
 
 cat $dev_dir/transcripts.txt |\
@@ -110,7 +111,7 @@ cat $dev_dir/transcripts.txt |\
   sed -e 's/<noise>\(.\+\)<\/noise>/\1/g' |\
   sed -e 's/((\([^)]\{0,\}\)))/\1/g' |\
   local/hkust_normalize.pl |\
-  python local/hkust_segment.py |\
+  python2 local/hkust_segment.py |\
   awk '{if (NF > 1) print $0;}' > $dev_dir/text
 
 # some data is corrupted. Delete them
@@ -173,5 +174,3 @@ for f in spk2utt utt2spk wav.scp text segments reco2file_and_channel; do
 done
 
 echo HKUST data preparation succeeded
-  
-exit 1;

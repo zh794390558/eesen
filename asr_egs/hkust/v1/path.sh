@@ -2,15 +2,15 @@ export EESEN_ROOT=`pwd`/../../..
 export PATH=$PWD/utils/:$EESEN_ROOT/src/netbin:$EESEN_ROOT/src/featbin:$EESEN_ROOT/src/decoderbin:$EESEN_ROOT/src/fstbin:$EESEN_ROOT/tools/openfst/bin:$EESEN_ROOT/tools/irstlm/bin/:$PWD:$PATH
 export LC_ALL=C
 
-if [[ `uname -n` =~ comet-* ]]; then
+if [[ `uname -n` =~ k8s* ]]; then
+  echo "k8s"
+elif [[ `uname -n` =~ comet-* ]]; then
   # SDSC Comet cluster
-  :
-  
-elif [[ `uname -n`=~ bridges ]]; then
+  echo "Comet"
+elif [[ `uname -n` =~ bridges ]]; then
   # PSC Bridges cluster
-  :
-  
-elif [[ `uname -n`=~ compute-* ]]; then
+  echo "bridges"
+elif [[ `uname -n` =~ compute-* ]]; then
   # CMU Rocks cluster
   
   module load gcc-4.9.2
@@ -24,7 +24,7 @@ elif [[ `uname -n`=~ compute-* ]]; then
 
 else
   echo "Which cluster is this?"
-  exit 1;
+  echo `uname -n`
 fi
 
 [ -f ${EESEN_ROOT}/tools/env.sh ] && . ${EESEN_ROOT}/tools/env.sh

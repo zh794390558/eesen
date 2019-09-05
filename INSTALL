@@ -13,7 +13,7 @@ These instructions are valid for UNIX-like systems. Installation on Windows is n
    The CUDA library should be installed before installing Eesen. Then Eesen can be installed as:
 
    > cd src
-   > ./configure --shared --cudatk-dir=/path/to/cuda_library
+   > ./configure --shared --cudatk-dir=/path/to/cuda_library --mathlib OPENBLAS
    > make depend
    > make
    
